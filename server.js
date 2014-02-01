@@ -2,7 +2,14 @@ var express =       require('express')
     , http =        require('http')
     , passport =    require('passport')
     , path =        require('path')
-    , User =        require('./server/models/User.js');
+    , User =        require('./server/models/User.js')
+    , config =      require('./config/config')
+    , mongoose =    require('mongoose');
+
+// Bootstrap db connection
+var db = mongoose.connect(config.db);
+
+
 
 var app = module.exports = express();
 
@@ -30,10 +37,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(User.localStrategy);
-passport.use(User.twitterStrategy());  // Comment out this line if you don't want to enable login via Twitter
-passport.use(User.facebookStrategy()); // Comment out this line if you don't want to enable login via Facebook
-passport.use(User.googleStrategy());   // Comment out this line if you don't want to enable login via Google
-passport.use(User.linkedInStrategy()); // Comment out this line if you don't want to enable login via LinkedIn
+//passport.use(User.twitterStrategy());  // Comment out this line if you don't want to enable login via Twitter
+//passport.use(User.facebookStrategy()); // Comment out this line if you don't want to enable login via Facebook
+//passport.use(User.googleStrategy());   // Comment out this line if you don't want to enable login via Google
+//passport.use(User.linkedInStrategy()); // Comment out this line if you don't want to enable login via LinkedIn
 
 passport.serializeUser(User.serializeUser);
 passport.deserializeUser(User.deserializeUser);
