@@ -1,7 +1,8 @@
 var expect = require('chai').expect
     , sinon = require('sinon')
     , AuthCtrl = require('../../../controllers/auth')
-    , User = require('../../../models/User');
+    , mongoose = require('mongoose')
+    , User = mongoose.model('User');
 
 describe('Auth controller Unit Tests - ', function() {
 

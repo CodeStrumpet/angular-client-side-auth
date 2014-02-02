@@ -1,15 +1,33 @@
 var express =       require('express')
+    , fs =          require('fs')
     , http =        require('http')
     , passport =    require('passport')
     , path =        require('path')
-    , User =        require('./server/models/User.js')
     , config =      require('./config/config')
     , mongoose =    require('mongoose');
 
 // Bootstrap db connection
 var db = mongoose.connect(config.db);
 
+//Bootstrap models
+var models_path = __dirname + '/server/models';
+var walk = function(path) {
+    fs.readdirSync(path).forEach(function(file) {
+        var newPath = path + '/' + file;
+        var stat = fs.statSync(newPath);
+        if (stat.isFile()) {
+            if (/(.*)\.(js$|coffee$)/.test(file)) {
+                require(newPath);
+            }
+        } else if (stat.isDirectory()) {
+            walk(newPath);
+        }
+    });
+};
+walk(models_path);
 
+//bootstrap passport config
+require('./config/passport')(passport);
 
 var app = module.exports = express();
 
@@ -36,14 +54,14 @@ app.configure('development', 'production', function() {
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(User.localStrategy);
+//passport.use(User.localStrategy);
 //passport.use(User.twitterStrategy());  // Comment out this line if you don't want to enable login via Twitter
 //passport.use(User.facebookStrategy()); // Comment out this line if you don't want to enable login via Facebook
 //passport.use(User.googleStrategy());   // Comment out this line if you don't want to enable login via Google
 //passport.use(User.linkedInStrategy()); // Comment out this line if you don't want to enable login via LinkedIn
 
-passport.serializeUser(User.serializeUser);
-passport.deserializeUser(User.deserializeUser);
+//passport.serializeUser(User.serializeUser);
+//passport.deserializeUser(User.deserializeUser);
 
 require('./server/routes.js')(app);
 

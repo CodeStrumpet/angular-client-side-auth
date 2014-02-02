@@ -1,5 +1,6 @@
 var _ =           require('underscore')
-    , User =      require('../models/User.js')
+    , mongoose  = require('mongoose')
+    , User      = mongoose.model('User')
     , userRoles = require('../../client/js/routingConfig').userRoles;
 
 module.exports = {

@@ -1,8 +1,38 @@
 var passport =  require('passport')
-    , User = require('../models/User.js');
+    , mongoose =    require('mongoose')
+    , User = mongoose.model('User');
 
 module.exports = {
     register: function(req, res, next) {
+        var user = new User(req.body);
+
+        var message = null;
+
+        user.provider = 'local';
+        user.save(function(err) {
+            if (err) {
+                switch (err.code) {
+                    case 11000:
+                    case 11001:
+                        message = 'Username already exists';
+                        break;
+                    default:
+                        message = 'Please fill all the required fields';
+                }
+
+                return res.render('users/signup', {
+                    message: message,
+                    user: user
+                });
+            }
+            req.logIn(user, function(err) {
+                if (err) return next(err);
+                else        { res.json(200, { "role": user.role, "username": user.username }); }
+                //return res.redirect('/');
+            });
+        });
+
+        /*
         try {
             User.validate(req.body);
         }
@@ -19,6 +49,7 @@ module.exports = {
                 else        { res.json(200, { "role": user.role, "username": user.username }); }
             });
         });
+        */
     },
 
     login: function(req, res, next) {

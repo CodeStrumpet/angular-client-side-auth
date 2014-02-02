@@ -1,9 +1,10 @@
 var _ =           require('underscore')
     , path =      require('path')
     , passport =  require('passport')
+    , mongoose =  require('mongoose')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
-    , User =      require('./models/User.js')
+    , User =      mongoose.model('User')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
 
@@ -147,6 +148,8 @@ function ensureAuthorized(req, res, next) {
     var role;
     if(!req.user) role = userRoles.public;
     else          role = req.user.role;
+
+    console.log('User: ' + req.user);
 
     var accessLevel = _.findWhere(routes, { path: req.route.path }).accessLevel || accessLevels.public;
 
