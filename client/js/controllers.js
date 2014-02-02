@@ -29,9 +29,11 @@ angular.module('angular-client-side-auth')
                 rememberme: $scope.rememberme
             },
             function(res) {
+                console.log('response: ' + JSON.stringify(res));
                 $location.path('/');
             },
             function(err) {
+                console.log('login error');
                 $rootScope.error = "Failed to login";
             });
     };

@@ -25,13 +25,13 @@ module.exports = function(passport) {
 
     //Use local strategy
     passport.use(new LocalStrategy({
-            usernameField: 'email',
+            usernameField: 'username',
             passwordField: 'password'
         },
-        function(email, password, done) {
+        function(username, password, done) {
             User.findOne({
-                email: email
-            }, function(err, user) {
+                username: username
+            }, 'salt hashed_password role username', function(err, user) {
                 if (err) {
                     return done(err);
                 }
@@ -40,6 +40,7 @@ module.exports = function(passport) {
                         message: 'Unknown user'
                     });
                 }
+
                 if (!user.authenticate(password)) {
                     return done(null, false, {
                         message: 'Invalid password'

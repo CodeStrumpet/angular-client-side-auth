@@ -33,6 +33,7 @@ angular.module('angular-client-side-auth')
         },
         login: function(user, success, error) {
             $http.post('/login', user).success(function(user){
+                console.log('user: ' + JSON.stringify(user));
                 changeUser(user);
                 success(user);
             }).error(error);
