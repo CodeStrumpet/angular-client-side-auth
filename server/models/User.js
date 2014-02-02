@@ -18,8 +18,7 @@ var UserSchema = new Schema({
         unique : true
     },
     username: {
-        type: String,
-        unique: true
+        type: String
     },
     role : {},
     hashed_password: {
@@ -105,7 +104,7 @@ UserSchema.methods = {
      * @api public
      */
     authenticate: function(plainText) {
-        console.log('plainText pass: ' + plainText + ' entryptedPlain: ' + this.encryptPassword(plainText) + '  hashed_pass: ' + this.hashed_password);
+        console.log('plaintext: ' + plainText);
         return this.encryptPassword(plainText) === this.hashed_password;
     },
 
@@ -116,12 +115,7 @@ UserSchema.methods = {
      * @api public
      */
     makeSalt: function() {
-        var newSalt = crypto.randomBytes(16).toString('base64');
-        if (!newSalt) {
-            console.log('salt creation failed');
-            newSalt = "weak_salt".toString('base64');
-        }
-        return newSalt;
+        return crypto.randomBytes(16).toString('base64');
     },
 
     /**
@@ -132,7 +126,6 @@ UserSchema.methods = {
      * @api public
      */
     encryptPassword: function(password) {
-        console.log('this.salt: ' + this.salt);
         if (!password || !this.salt) return '';
         var salt = new Buffer(this.salt, 'base64');
         return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');

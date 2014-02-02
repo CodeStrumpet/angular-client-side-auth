@@ -10,7 +10,9 @@ module.exports = {
 
         user.provider = 'local';
         user.save(function(err) {
+            console.log('user in register: ' + JSON.stringify(user));
             if (err) {
+                console.log('err: ' + err);
                 switch (err.code) {
                     case 11000:
                     case 11001:
@@ -27,7 +29,7 @@ module.exports = {
             }
             req.logIn(user, function(err) {
                 if (err) return next(err);
-                else        { res.json(200, { "role": user.role, "username": user.username }); }
+                else        { res.json(200, { "role": user.role, "email": user.email }); }
                 //return res.redirect('/');
             });
         });
@@ -53,6 +55,8 @@ module.exports = {
     },
 
     login: function(req, res, next) {
+        console.log('req body: ' + JSON.stringify(req.body));
+        req.body.username = req.body.email;
         passport.authenticate('local', function(err, user, info) {
 
             console.log('user back from passport: ' + JSON.stringify(info));
@@ -67,7 +71,8 @@ module.exports = {
                 }
 
                 if(req.body.rememberme) req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
-                res.json(200, { "role": user.role, "username": user.username });
+                var userResp = { "role": user.role, "email": user.email };
+                res.json(200, userResp);
             });
         })(req, res, next);
     },

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    db: "mongodb://localhost/angular-auth",
+    db: "mongodb://localhost/angular-auth-dev",
     app: {
         name: "angular-client-side-auth - Development"
     },

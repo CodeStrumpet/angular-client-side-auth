@@ -30,9 +30,12 @@ module.exports = function(passport) {
         },
         function(email, password, done) {
             User.findOne({
+
                 email: email
-            }, function(err, user) {
-                console.log('err: ' + JSON.stringify(err) + '  user: ' + JSON.stringify(user));
+			}, 'salt hashed_password role username email', function(err, user) {
+
+                console.log('user passport login: ' + JSON.stringify(user));
+
                 if (err) {
                     return done(err);
                 }
@@ -41,6 +44,7 @@ module.exports = function(passport) {
                         message: 'Unknown user'
                     });
                 }
+
                 if (!user.authenticate(password)) {
                     return done(null, false, {
                         message: 'Invalid password'

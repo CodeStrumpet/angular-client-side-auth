@@ -30,6 +30,10 @@ node_modules/
 # PDT-specific
 .buildpath
 
+#################
+## Emacs
+#################
+*~
 
 #################
 ## Visual Studio
