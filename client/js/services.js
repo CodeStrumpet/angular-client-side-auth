@@ -5,7 +5,7 @@ angular.module('angular-client-side-auth')
 
     var accessLevels = routingConfig.accessLevels
         , userRoles = routingConfig.userRoles
-        , currentUser = $cookieStore.get('user') || { username: '', role: userRoles.public };
+        , currentUser = $cookieStore.get('user') || { email: '', role: userRoles.public };
 
     $cookieStore.remove('user');
 
@@ -40,7 +40,7 @@ angular.module('angular-client-side-auth')
         logout: function(success, error) {
             $http.post('/logout').success(function(){
                 changeUser({
-                    username: '',
+                    email: '',
                     role: userRoles.public
                 });
                 success();

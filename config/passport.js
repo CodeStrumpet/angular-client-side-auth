@@ -32,6 +32,7 @@ module.exports = function(passport) {
             User.findOne({
                 email: email
             }, function(err, user) {
+                console.log('err: ' + JSON.stringify(err) + '  user: ' + JSON.stringify(user));
                 if (err) {
                     return done(err);
                 }

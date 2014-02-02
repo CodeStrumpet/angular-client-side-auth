@@ -20,7 +20,7 @@ module.exports = {
                         message = 'Please fill all the required fields';
                 }
 
-                return res.render('users/signup', {
+                return res.json({
                     message: message,
                     user: user
                 });
@@ -53,7 +53,9 @@ module.exports = {
     },
 
     login: function(req, res, next) {
-        passport.authenticate('local', function(err, user) {
+        passport.authenticate('local', function(err, user, info) {
+
+            console.log('user back from passport: ' + JSON.stringify(info));
 
             if(err)     { return next(err); }
             if(!user)   { return res.send(400); }

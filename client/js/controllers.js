@@ -5,6 +5,7 @@
 angular.module('angular-client-side-auth')
 .controller('NavCtrl', ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
     $scope.user = Auth.user;
+    console.log('user: ' + JSON.stringify($scope.user));
     $scope.userRoles = Auth.userRoles;
     $scope.accessLevels = Auth.accessLevels;
 
@@ -24,7 +25,7 @@ angular.module('angular-client-side-auth')
     $scope.rememberme = true;
     $scope.login = function() {
         Auth.login({
-                username: $scope.username,
+                email: $scope.email,
                 password: $scope.password,
                 rememberme: $scope.rememberme
             },
@@ -55,7 +56,7 @@ angular.module('angular-client-side-auth')
 
     $scope.register = function() {
         Auth.register({
-                username: $scope.username,
+                email: $scope.email,
                 password: $scope.password,
                 role: $scope.role
             },

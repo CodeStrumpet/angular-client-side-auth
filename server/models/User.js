@@ -13,7 +13,10 @@ var mongoose = require('mongoose'),
  */
 var UserSchema = new Schema({
     name: String,
-    email: String,
+    email: {
+        type : String,
+        unique : true
+    },
     username: {
         type: String,
         unique: true
@@ -102,6 +105,7 @@ UserSchema.methods = {
      * @api public
      */
     authenticate: function(plainText) {
+        console.log('plainText pass: ' + plainText + ' entryptedPlain: ' + this.encryptPassword(plainText) + '  hashed_pass: ' + this.hashed_password);
         return this.encryptPassword(plainText) === this.hashed_password;
     },
 
@@ -112,7 +116,12 @@ UserSchema.methods = {
      * @api public
      */
     makeSalt: function() {
-        return crypto.randomBytes(16).toString('base64');
+        var newSalt = crypto.randomBytes(16).toString('base64');
+        if (!newSalt) {
+            console.log('salt creation failed');
+            newSalt = "weak_salt".toString('base64');
+        }
+        return newSalt;
     },
 
     /**
@@ -123,6 +132,7 @@ UserSchema.methods = {
      * @api public
      */
     encryptPassword: function(password) {
+        console.log('this.salt: ' + this.salt);
         if (!password || !this.salt) return '';
         var salt = new Buffer(this.salt, 'base64');
         return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
